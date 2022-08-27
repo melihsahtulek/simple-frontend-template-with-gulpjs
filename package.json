@@ -9,10 +9,6 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/melihsahtulek/simple-frontend-template-with-gulpjs/issues"
-  },
-  "homepage": "https://github.com/melihsahtulek/simple-frontend-template-with-gulpjs#readme",
   "devDependencies": {
     "@babel/core": "^7.18.13",
     "@babel/preset-env": "^7.18.10",

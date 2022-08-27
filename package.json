@@ -6,10 +6,6 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://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@github.com/melihsahtulek/simple-frontend-template-with-gulpjs.git"
-  },
   "keywords": [],
   "author": "",
   "license": "ISC",

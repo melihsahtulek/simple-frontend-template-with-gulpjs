@@ -9,6 +9,15 @@ const rename = require("gulp-rename");
 const babel = require("gulp-babel");
 const gulpuglify = require("gulp-uglify");
 
+const directories = {
+  html: __dirname + "/src/**/*.html",
+  scss: __dirname + "/src/assets/scss/**/*.scss",
+  js: __dirname + "/src/assets/js/**/*.js",
+  output: __dirname + "/dist",
+};
+
+console.log(directories.scss);
+
 // Static server
 function serve() {
   browserSync.init({
@@ -17,25 +26,40 @@ function serve() {
       directory: true,
     },
   });
+
+  watch(directories.html).on("change", function () {
+    html();
+    reload();
+  });
+
+  watch(directories.scss).on("change", function () {
+    scss();
+    reload();
+  });
+
+  watch(directories.js).on("change", function () {
+    js();
+    reload();
+  });
 }
 
-function runhtml() {
-  return src("./src/**/*.html")
+function html() {
+  return src(directories.html)
     .pipe(htmlmin({ collapseWhitespace: true }))
-    .pipe(dest("./dist/"));
+    .pipe(dest(directories.output));
 }
 
-function runcss() {
-  return src("./src/assets/scss/**/*.scss")
-    .pipe(autoprefixer({ overrideBrowserslist: ["last 99 versions"], cascade: false }))
+function scss() {
+  return src(directories.scss)
     .pipe(sass())
+    .pipe(autoprefixer({ overrideBrowserslist: ["last 99 versions"], cascade: false }))
     .pipe(cleancss())
     .pipe(rename({ extname: ".min.css" }))
-    .pipe(dest("./dist/"));
+    .pipe(dest(directories.output));
 }
 
-function runjs() {
-  return src("./src/assets/js/**/*.js")
+function js() {
+  return src(directories.js)
     .pipe(
       babel({
         presets: ["@babel/env"],
@@ -43,21 +67,7 @@ function runjs() {
     )
     .pipe(gulpuglify())
     .pipe(rename({ extname: ".min.js" }))
-    .pipe(dest("./dist/"));
+    .pipe(dest(directories.output));
 }
 
-function watchFiles() {
-  watch("./src/**/*.html", runhtml).on("change", function () {
-    reload();
-  });
-
-  watch("./src/assets/scss/**/*.scss", runcss).on("change", function () {
-    reload();
-  });
-
-  watch("./src/assets/js/**/*.js", runjs).on("change", function () {
-    reload();
-  });
-}
-
-exports.default = series(runhtml, runcss, runjs, serve, watchFiles);
+exports.default = series(html, scss, js, serve);
